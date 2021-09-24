@@ -20,10 +20,16 @@ bin/kafka-topics.sh --create --topic <topic-name> --bootstrap-server localhost:9
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic <topic-name> --from-beginning -property "key.separator= - " --property "print.key=true"
 ```
 
-4. List all the topics
+4. Create console consumer with group id
+
+```
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test-topic --group <group-name>
+```
+
+5. List all the topics
 
 ```
 ./kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 
-_Note_ - All .sh files are in bin directory.
+_Note - All .sh files are in bin directory._
