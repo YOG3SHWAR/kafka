@@ -32,4 +32,18 @@ bin/kafka-topics.sh --create --topic <topic-name> --bootstrap-server localhost:9
 ./kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 
+6. Describe the topics
+
+- All topics
+
+```
+./kafka-topics.sh --bootstrap-server localhost:9092 --describe
+```
+
+- Specific topic
+
+```
+./kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic <topic-name>
+```
+
 _Note - All .sh files are in bin directory._
