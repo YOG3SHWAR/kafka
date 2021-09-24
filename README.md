@@ -1,6 +1,7 @@
 # Useful commands
 
 ---
+These are the commands that can be useful if you are running kafka locally.
 
 1. Create a topic
 
