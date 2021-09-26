@@ -10,3 +10,33 @@ Content-Type: application/json
         "bookAuthor": "Yogeshwar Chaturvedi"
     }
 }
+
+###
+
+POST /v1/library-event-sync
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "libraryEventId": null,
+    "book": {
+        "bookId": 1,
+        "bookName": "Learning Kafka using Spring Boot",
+        "bookAuthor": "Yogeshwar Chaturvedi"
+    }
+}
+
+###
+
+POST /v1/library-event2
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "libraryEventId": null,
+    "book": {
+        "bookId": 1,
+        "bookName": "Learning Kafka using Spring Boot",
+        "bookAuthor": "Yogeshwar Chaturvedi"
+    }
+}
