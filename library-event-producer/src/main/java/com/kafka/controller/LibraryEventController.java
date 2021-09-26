@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kafka.domain.LibraryEvent;
+import com.kafka.domain.LibraryEventType;
 import com.kafka.producer.LibraryEventProducer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +56,9 @@ public class LibraryEventController {
     public ResponseEntity<LibraryEvent> postLibraryEvent2(@RequestBody LibraryEvent libraryEvent)
             throws JsonProcessingException {
 
+        libraryEvent.setLibraryEventType(LibraryEventType.NEW);
         // invoking kafka producer using send() and ProducerRecord
-        log.info("before sendLibraryEvent");
         eventProducer.sendLibraryEvent2(libraryEvent);
-        log.info("after sendLibraryEvent");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
     }
