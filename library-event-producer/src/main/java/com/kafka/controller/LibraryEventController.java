@@ -21,9 +21,9 @@ public class LibraryEventController {
     public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody LibraryEvent libraryEvent) throws JsonProcessingException {
 
         // invoking kafka producer
+        eventProducer.sendLibraryEvent(libraryEvent);
         // this is an asynchronous call, this will return status 201 (CREATED) even 
         // if the message is not published 
-        eventProducer.sendLibraryEvent(libraryEvent);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
     }
