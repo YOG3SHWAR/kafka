@@ -1,5 +1,6 @@
 package com.kafka.producer;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -8,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kafka.domain.LibraryEvent;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -100,7 +103,8 @@ public class LibraryEventProducer {
     }
 
     private ProducerRecord<Integer, String> buildProducerRecord(Integer key, String value, String topic2) {
-        return new ProducerRecord<>(topic, null, key, value, null);
+        List<Header> recordHeaders = List.of(new RecordHeader("event-source", "scanner".getBytes()));
+        return new ProducerRecord<>(topic2, null, key, value, recordHeaders);
     }
 
     private void handleSuccess(Integer key, String value, SendResult<Integer, String> result) {
