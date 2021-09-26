@@ -3,5 +3,10 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-
+    "libraryEventId": null,
+    "book": {
+        "bookId": 1,
+        "bookName": "Learning Kafka using Spring Boot",
+        "bookAuthor": "Yogeshwar Chaturvedi"
+    }
 }

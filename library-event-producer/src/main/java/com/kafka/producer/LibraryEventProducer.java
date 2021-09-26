@@ -34,13 +34,11 @@ public class LibraryEventProducer {
             @Override
             public void onSuccess(SendResult<Integer, String> result) {
                 handleSuccess(key, value, result);
-
             }
 
             @Override
             public void onFailure(Throwable ex) {
                 handleFailure(key, value, ex);
-
             }
 
             private void handleSuccess(Integer key, String value, SendResult<Integer, String> result) {
