@@ -41,22 +41,22 @@ public class LibraryEventProducer {
                 handleFailure(key, value, ex);
             }
 
-            private void handleSuccess(Integer key, String value, SendResult<Integer, String> result) {
-
-                log.info("Message sent successfully, key = {}, value = {}, partition = {}", key, value,
-                        result.getRecordMetadata().partition());
-
-            }
-
-            private void handleFailure(Integer key, String value, Throwable ex) {
-                log.error("Error sending the message , key = {}, value = {}, message = {}", key, value,
-                        ex.getMessage());
-                try {
-                    throw ex;
-                } catch (Throwable e) {
-                    log.error("Error in onFailure: {}", e.getMessage());
-                }
-            }
         });
+    }
+
+    private void handleSuccess(Integer key, String value, SendResult<Integer, String> result) {
+
+        log.info("Message sent successfully, key = {}, value = {}, partition = {}", key, value,
+                result.getRecordMetadata().partition());
+
+    }
+
+    private void handleFailure(Integer key, String value, Throwable ex) {
+        log.error("Error sending the message , key = {}, value = {}, message = {}", key, value, ex.getMessage());
+        try {
+            throw ex;
+        } catch (Throwable e) {
+            log.error("Error in onFailure: {}", e.getMessage());
+        }
     }
 }
