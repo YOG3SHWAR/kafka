@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class LibraryEvent {
-    private int libraryEventId;
+    private Integer libraryEventId;
     private Book book;
 }
