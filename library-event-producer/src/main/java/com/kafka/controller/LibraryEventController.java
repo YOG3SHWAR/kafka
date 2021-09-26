@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,5 +62,18 @@ public class LibraryEventController {
         eventProducer.sendLibraryEvent2(libraryEvent);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
+    }
+
+    @PutMapping("/library-event2")
+    public ResponseEntity<Object> putLibraryEvent2(@RequestBody LibraryEvent libraryEvent)
+            throws JsonProcessingException {
+
+        if (libraryEvent.getLibraryEventId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please provide libraryEventId");
+        }
+        libraryEvent.setLibraryEventType(LibraryEventType.UPDATE);
+        eventProducer.sendLibraryEvent2(libraryEvent);
+
+        return ResponseEntity.status(HttpStatus.OK).body(libraryEvent);
     }
 }
