@@ -50,4 +50,5 @@ public class LibraryEventsConsumerConfig {
         policy.setMaxAttempts(3);
         return policy;
     }
+    // test
 }
