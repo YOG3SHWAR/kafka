@@ -1,8 +1,12 @@
 package com.kafka.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -46,9 +50,9 @@ public class LibraryEventsConsumerConfig {
 
     private RetryPolicy retryPolicy() {
 
-        SimpleRetryPolicy policy = new SimpleRetryPolicy();
-        policy.setMaxAttempts(3);
-        return policy;
+        Map<Class<? extends Throwable>, Boolean> exceptionsMap = new HashMap();
+        exceptionsMap.put(IllegalArgumentException.class, false);
+        exceptionsMap.put(RecoverableDataAccessException.class, true);
+        return new SimpleRetryPolicy(3, exceptionsMap, true);
     }
-    // test
 }
