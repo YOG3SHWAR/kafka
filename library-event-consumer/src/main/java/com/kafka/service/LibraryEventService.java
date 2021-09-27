@@ -1,5 +1,7 @@
 package com.kafka.service;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kafka.entity.LibraryEvent;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class LibraryEventService {
+
     @Autowired
     ObjectMapper mapper;
 
@@ -21,6 +24,7 @@ public class LibraryEventService {
     LibraryEventRepository repository;
 
     public void processLibraryEvent(ConsumerRecord<Integer, String> consumerRecord) throws JsonProcessingException {
+
         LibraryEvent libraryEvent = mapper.readValue(consumerRecord.value(), LibraryEvent.class);
         log.info("libraryEvent = {}", libraryEvent);
 
@@ -29,15 +33,29 @@ public class LibraryEventService {
                 save(libraryEvent);
                 break;
             case UPDATE:
-                // update in db
+                validate(libraryEvent);
+                save(libraryEvent);
                 break;
             default:
                 log.info("Invalid library event type");
         }
     }
 
+    private void validate(LibraryEvent libraryEvent) {
+
+        if (libraryEvent.getLibraryEventId() == null)
+            throw new IllegalArgumentException("Library Event Id is missing");
+
+        Optional<LibraryEvent> optional = repository.findById(libraryEvent.getLibraryEventId());
+
+        if (!optional.isPresent())
+            throw new IllegalArgumentException("Invalid Library Event");
+
+        log.info("Validation Successful");
+    }
+
     private void save(LibraryEvent libraryEvent) {
-        libraryEvent.getBook().setLibraryEvent(libraryEvent);
+
         repository.save(libraryEvent);
         log.info("Successfully saved in db");
     }
