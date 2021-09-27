@@ -50,7 +50,7 @@ public class LibraryEventsConsumerConfig {
 
     private RetryPolicy retryPolicy() {
 
-        Map<Class<? extends Throwable>, Boolean> exceptionsMap = new HashMap();
+        Map<Class<? extends Throwable>, Boolean> exceptionsMap = new HashMap<>();
         exceptionsMap.put(IllegalArgumentException.class, false);
         exceptionsMap.put(RecoverableDataAccessException.class, true);
         return new SimpleRetryPolicy(3, exceptionsMap, true);
