@@ -10,6 +10,7 @@ import com.kafka.jpa.LibraryEventRepository;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +25,15 @@ public class LibraryEventService {
     @Autowired
     LibraryEventRepository repository;
 
+    @Autowired
+    KafkaTemplate KafkaTemplate;
+ 
     public void processLibraryEvent(ConsumerRecord<Integer, String> consumerRecord) throws JsonProcessingException {
 
         LibraryEvent libraryEvent = mapper.readValue(consumerRecord.value(), LibraryEvent.class);
         log.info("libraryEvent = {}", libraryEvent);
 
-        if(libraryEvent.getLibraryEventId()!=null && libraryEvent.getLibraryEventId()==000)
+        if (libraryEvent.getLibraryEventId() != null && libraryEvent.getLibraryEventId() == 000)
             throw new RecoverableDataAccessException("Network Issue");
 
         switch (libraryEvent.getLibraryEventType()) {
@@ -62,5 +66,9 @@ public class LibraryEventService {
 
         repository.save(libraryEvent);
         log.info("Successfully saved in db");
+    }
+
+    public void handleRecovery(ConsumerRecord<Integer, String> record) {
+
     }
 }

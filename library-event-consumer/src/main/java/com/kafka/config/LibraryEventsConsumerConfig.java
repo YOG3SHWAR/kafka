@@ -5,6 +5,10 @@ import java.util.Map;
 
 import javax.management.RuntimeErrorException;
 
+import com.kafka.service.LibraryEventService;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @EnableKafka
 @Slf4j
 public class LibraryEventsConsumerConfig {
+
+    @Autowired
+    LibraryEventService service;
 
     @Bean
     ConcurrentKafkaListenerContainerFactory<Object, Object> kafkaListenerContainerFactory(
@@ -46,6 +53,12 @@ public class LibraryEventsConsumerConfig {
             if (context.getLastThrowable().getCause() instanceof RecoverableDataAccessException) {
                 // recovery logic
                 log.info("message is recoverable, inside recoevery logic");
+
+                ConsumerRecord<Integer, String> record = (ConsumerRecord<Integer, String>) context
+                        .getAttribute("record");
+
+                service.handleRecovery(record);
+
             } else {
                 throw new RuntimeException(context.getLastThrowable().getMessage());
             }
