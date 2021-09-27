@@ -3,6 +3,8 @@ package com.kafka.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.boot.autoconfigure.kafka.ConcurrentKafkaListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,12 +31,27 @@ public class LibraryEventsConsumerConfig {
 
         ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         configurer.configure(factory, kafkaConsumerFactory);
+
         factory.setConcurrency(3); // setting number of concurrent listners
         // factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL)
         factory.setErrorHandler(((thrownException, data) -> {
             log.info("Exception in consumer config = {}, record = {}", thrownException.getMessage(), data);
         }));
+
+        // retry
         factory.setRetryTemplate(retryTemplate());
+
+        // recovery
+        factory.setRecoveryCallback((context -> {
+            if (context.getLastThrowable().getCause() instanceof RecoverableDataAccessException) {
+                // recovery logic
+                log.info("message is recoverable, inside recoevery logic");
+            } else {
+                throw new RuntimeException(context.getLastThrowable().getMessage());
+            }
+            return null;
+        }));
+
         return factory;
     }
 
