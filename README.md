@@ -195,3 +195,9 @@ ssl.keystore.location=<location>/client.keystore.jks
 ssl.keystore.password=password
 ssl.key.password=password
 ```
+
+**See the keystore file**
+
+```
+keytool -list -v -keystore server.keystore.jks
+```
